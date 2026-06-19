@@ -87,10 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
 
-                        // Set nilai input dengan koordinat (bisa dikembangkan dengan API Google Maps/OpenStreetMap)
                         locationInput.value = `Koordinat GPS: ${lat}, ${lng} (Lokasi Terdeteksi)`;
 
-                        // Kembalikan ikon semula
                         icon.className =
                             "fa-solid fa-location-crosshairs text-lg";
                     },
@@ -109,25 +107,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // === SUB-TAB NAVIGASI DI INTERNAL KOMUNITAS (TAB KOMUNITAS) ===
     const subTabButtons = document.querySelectorAll(
         "#komunitas .flex.gap-2 button",
     );
 
     subTabButtons.forEach((button) => {
         button.addEventListener("click", function () {
-            // Reset semua tombol sub-tab komunitas (hapus background putih & teks tebal)
             subTabButtons.forEach((btn) => {
                 btn.className =
                     "text-gray-500 px-6 py-2 rounded-lg text-sm hover:bg-white whitespace-nowrap w-1/4 transition";
             });
 
-            // Set tombol yang diklik menjadi aktif
             this.className =
                 "bg-white text-gray-800 border border-gray-200 px-6 py-2 rounded-lg text-sm shadow-sm font-semibold whitespace-nowrap w-1/4 transition";
 
-            // Catatan: Jika ingin menambahkan penyaringan konten Forum/Info/Edukasi asli,
-            // logika filter elemennya bisa ditulis di bawah sini.
             const subTabName = this.textContent.trim();
             console.log(`Berpindah ke sub-tab komunitas: ${subTabName}`);
         });
