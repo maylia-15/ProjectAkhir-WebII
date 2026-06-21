@@ -7,11 +7,7 @@ use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * Sesuai konsep UI: dropdown kategori sampah saat warga membuat laporan.
-     */
+
     public function run(): void
     {
         $categories = [

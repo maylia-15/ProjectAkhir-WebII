@@ -6,23 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade');
+
             $table->string('judul');
-            $table->text('isi_pengumuman');
+
+            $table->enum('tipe', ['jadwal_kerja_bakti', 'jadwal_truk_sampah', 'himbauan'])
+                ->default('himbauan');
+
+            $table->text('isi');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('announcements');

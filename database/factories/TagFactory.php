@@ -5,9 +5,6 @@ namespace Database\Factories;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
- */
 class TagFactory extends Factory
 {
     /**
@@ -25,7 +22,6 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            // Membuat bank data hashtag tiruan agar otomatis terisi saat diseed
             'nama_tag' => $this->faker->unique()->randomElement([
                 'Bau Menyengat',
                 'Menumpuk',

@@ -7,12 +7,9 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
-        // 1 akun Admin tetap (login pasti bisa dipakai untuk demo/presentasi)
         User::updateOrCreate(
             ['email' => 'admin@bisa.test'],
             [
@@ -26,7 +23,6 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // 1 akun Warga tetap (untuk demo/presentasi, supaya gampang login tanpa nebak data acak)
         User::updateOrCreate(
             ['email' => 'warga@bisa.test'],
             [
@@ -40,7 +36,6 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // 13 warga tambahan (acak) via Factory -> total 15 user dummy sesuai target awal kelompok
         User::factory()
             ->count(13)
             ->warga()
