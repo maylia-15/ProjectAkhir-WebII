@@ -6,9 +6,6 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Report>
- */
 class ReportFactory extends Factory
 {
     /**
@@ -36,25 +33,16 @@ class ReportFactory extends Factory
         ];
     }
 
-    /**
-     * State: status menunggu validasi (default warga baru lapor).
-     */
     public function menunggu(): static
     {
         return $this->state(fn (array $attributes) => ['status' => 'menunggu']);
     }
 
-    /**
-     * State: status sedang diproses petugas.
-     */
     public function diproses(): static
     {
         return $this->state(fn (array $attributes) => ['status' => 'diproses']);
     }
 
-    /**
-     * State: status sudah selesai ditangani.
-     */
     public function selesai(): static
     {
         return $this->state(fn (array $attributes) => ['status' => 'selesai']);

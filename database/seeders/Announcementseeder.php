@@ -8,9 +8,7 @@ use Illuminate\Database\Seeder;
 
 class AnnouncementSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         $admin = User::where('role', 'admin')->first();
@@ -20,7 +18,6 @@ class AnnouncementSeeder extends Seeder
             return;
         }
 
-        // 3 pengumuman tetap (representatif untuk tiap tipe, ditampilkan di dashboard user)
         $announcements = [
             [
                 'judul' => 'Kerja Bakti Bersama Warga Minggu Ini',
@@ -46,7 +43,6 @@ class AnnouncementSeeder extends Seeder
             );
         }
 
-        // Tambahan pengumuman acak untuk variasi data
         Announcement::factory()
             ->count(4)
             ->state(['user_id' => $admin->id])

@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('report_tag', function (Blueprint $table) {
@@ -16,12 +13,11 @@ return new class extends Migration
             $table->foreignId('report_id')->constrained('reports')->onDelete('cascade');
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique(['report_id', 'tag_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('report_tag');
