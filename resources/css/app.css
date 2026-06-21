@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
-/* Kustomisasi Scrollbar Khusus Desktop Dashboard */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+html, body { 
+    background-color: #F8FAFC; 
+    overflow: hidden;
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-slate-200 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-slate-300; }
+
+/* Animasi Fade In untuk Konten Spa/Halaman */
+.fade-in { animation: fadeIn 0.2s ease-out forwards; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400;
+/* 💡 PERBAIKAN UTAMA: Paksa transisi sidebar jika class Tailwind terhambat compile */
+#sidebar {
+    transition: margin-left 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
