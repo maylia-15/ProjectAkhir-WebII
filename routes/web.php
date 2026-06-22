@@ -11,25 +11,11 @@ use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\ReportController as UserReportController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - Project BiSa (Backend: Manda)
-|--------------------------------------------------------------------------
-| Dikelompokkan per middleware:
-| 1. guest   -> belum login (login, register)
-| 2. auth    -> sudah login, dipakai bersama (profil, logout)
-| 3. auth + role:admin  -> khusus Admin
-| 4. auth + role:warga  -> khusus Warga
-*/
+
 
 // Landing Page (Akses Publik) - sesuai konsep UI revisi final
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
-/*
-|--------------------------------------------------------------------------
-| 1. Guest Routes (belum login)
-|--------------------------------------------------------------------------
-*/
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
@@ -38,11 +24,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.attempt');
 });
 
-/*
-|--------------------------------------------------------------------------
-| 2. Auth Routes (sudah login, dipakai Admin maupun Warga)
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -52,11 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-/*
-|--------------------------------------------------------------------------
-| 3. Admin Routes (khusus role: admin)
-|--------------------------------------------------------------------------
-*/
+
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -79,13 +57,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/warga', [WargaController::class, 'index'])->name('wargas.index');
     });
 
-/*
-|--------------------------------------------------------------------------
-| 4. User/Warga Routes (khusus role: warga)
-|--------------------------------------------------------------------------
-| Catatan: TIDAK ADA route Pengumuman terpisah di sini -> Pengumuman hanya
-| muncul sebagai Card di Dashboard (lihat UserDashboardController@index).
-*/
+
 Route::middleware(['auth', 'role:warga'])
     ->prefix('user')
     ->name('user.')
@@ -101,3 +73,166 @@ Route::middleware(['auth', 'role:warga'])
         Route::put('/laporan/{report}', [UserReportController::class, 'update'])->name('reports.update');
         Route::delete('/laporan/{report}', [UserReportController::class, 'destroy'])->name('reports.destroy');
     });
+
+/*
+|--------------------------------------------------------------------------
+| 🧪 TEMPORARY PREVIEW ROUTES (Rute Sementara untuk Cek UI Naufal)
+|--------------------------------------------------------------------------
+| Hapus atau komentari seluruh blok ini jika proyek sudah siap dikumpul/UAS!
+*/
+Route::prefix('preview')->group(function () {
+
+    // Helper otomatis untuk login tiruan Warga (Biar layout.user tidak null)
+    $loginWargaDummy = function () {
+        $user = new \App\Models\User([
+            'name' => 'Ahmad Wijaya',
+            'blok_rumah' => 'A-101',
+            'no_hp' => '08123456789',
+            'email' => 'warga.dummy@bi.sa',
+            'role' => 'warga'
+        ]);
+        \Illuminate\Support\Facades\Auth::login($user);
+        return $user;
+    };
+
+    // Helper otomatis untuk login tiruan Admin (Biar layout.admin tidak null)
+    $loginAdminDummy = function () {
+        $user = new \App\Models\User([
+            'name' => 'Pak RT Ahmad',
+            'blok_rumah' => 'Kantor RT',
+            'no_hp' => '08987654321',
+            'email' => 'admin.dummy@bi.sa',
+            'role' => 'admin'
+        ]);
+        \Illuminate\Support\Facades\Auth::login($user);
+        return $user;
+    };
+
+    // Helper otomatis untuk merakit Data Laporan Tiruan Lengkap beserta Relasinya
+    $makeReportDummy = function () {
+        $report = new \App\Models\Report();
+        
+        // REVISI: Menggunakan forceFill agar created_at tidak di-block oleh $fillable
+        $report->forceFill([
+            'id' => 1,
+            'judul' => 'Sampah Menumpuk di Pertigaan Blok A',
+            'deskripsi' => 'Sampah kantong plastik dan sisa makanan menumpuk hingga memakan bahu jalan dan menimbulkan bau menyengat.',
+            'lokasi' => 'Depan lapangan dekat pertigaan Blok A',
+            'status' => 'menunggu',
+            'created_at' => now(),
+        ]);
+        
+        // Suntik relasi agar tidak memicu error "property on null"
+        $report->setRelation('user', new \App\Models\User(['name' => 'Ahmad Wijaya', 'blok_rumah' => 'A-101']));
+        $report->setRelation('category', new \App\Models\Category(['nama_kategori' => 'Anorganik']));
+        $report->setRelation('tags', collect([
+            new \App\Models\Tag(['nama_tag' => 'Menumpuk']),
+            new \App\Models\Tag(['nama_tag' => 'Bau Menyengat'])
+        ]));
+        
+        return $report;
+    };
+
+    // 1. Landing Page & Autentikasi
+    Route::get('/landing', function () {
+        return view('landing', ['totalLaporanSelesai' => 142]);
+    });
+    Route::view('/login', 'auth.login');
+    Route::view('/register', 'auth.register');
+
+    // 2. Halaman Profil
+    Route::get('/profil', function () use ($loginWargaDummy) {
+        $user = $loginWargaDummy();
+        return view('profile.show', ['user' => $user]);
+    });
+    Route::get('/profil/edit', function () use ($loginWargaDummy) {
+        $user = $loginWargaDummy();
+        return view('profile.edit', ['user' => $user]);
+    });
+
+    // 3. Tampilan Halaman USER / WARGA
+    Route::get('/user/dashboard', function () use ($loginWargaDummy) {
+        $loginWargaDummy();
+        return view('user.dashboard.index', [
+            'pengumumanBanner' => null, 
+            'ringkasan' => ['total' => 4, 'menunggu' => 1, 'diproses' => 1, 'selesai' => 2],
+            'laporanTerbaru' => collect(),
+            'pengumumanTerbaru' => collect()
+        ]);
+    });
+    
+    Route::get('/user/laporan', function () use ($loginWargaDummy) {
+        $loginWargaDummy();
+        $paginatorDummy = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10, 1, [
+            'path' => request()->url()
+        ]);
+        return view('user.reports.index', ['reports' => $paginatorDummy]);
+    });
+    
+    Route::get('/user/laporan/buat', function () use ($loginWargaDummy) {
+        $loginWargaDummy();
+        $categoriesDummy = collect([
+            new \App\Models\Category(['id' => 1, 'nama_kategori' => 'Organik']),
+            new \App\Models\Category(['id' => 2, 'nama_kategori' => 'Anorganik']),
+            new \App\Models\Category(['id' => 3, 'nama_kategori' => 'B3 (Berbahaya)']),
+        ]);
+        $tagsDummy = collect([
+            new \App\Models\Tag(['id' => 1, 'nama_tag' => 'Bau Menyengat']),
+            new \App\Models\Tag(['id' => 2, 'nama_tag' => 'Menumpuk']),
+            new \App\Models\Tag(['id' => 3, 'nama_tag' => 'Berserakan']),
+        ]);
+        return view('user.reports.create', ['categories' => $categoriesDummy, 'tags' => $tagsDummy]);
+    });
+
+    Route::get('/user/laporan/detail', function () use ($loginWargaDummy, $makeReportDummy) {
+        $loginWargaDummy();
+        return view('user.reports.show', ['report' => $makeReportDummy()]);
+    });
+
+    Route::get('/user/laporan/edit', function () use ($loginWargaDummy, $makeReportDummy) {
+        $loginWargaDummy();
+        $categoriesDummy = collect([
+            new \App\Models\Category(['id' => 1, 'nama_kategori' => 'Organik']),
+            new \App\Models\Category(['id' => 2, 'nama_kategori' => 'Anorganik']),
+        ]);
+        $tagsDummy = collect([
+            new \App\Models\Tag(['id' => 1, 'nama_tag' => 'Bau Menyengat']),
+            new \App\Models\Tag(['id' => 2, 'nama_tag' => 'Menumpuk']),
+        ]);
+        return view('user.reports.edit', [
+            'report' => $makeReportDummy(),
+            'categories' => $categoriesDummy,
+            'tags' => $tagsDummy
+        ]);
+    });
+
+    // 4. Tampilan Halaman ADMIN
+    Route::get('/admin/dashboard', function () use ($loginAdminDummy) {
+        $loginAdminDummy();
+        return view('admin.dashboard.index', [
+            'ringkasan' => ['total' => 12, 'menunggu' => 3, 'diproses' => 4, 'selesai' => 5]
+        ]);
+    });
+    
+    Route::get('/admin/laporan', function () use ($loginAdminDummy) {
+        $loginAdminDummy();
+        $paginatorDummy = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10, 1, [
+            'path' => request()->url()
+        ]);
+        return view('admin.reports.index', ['reports' => $paginatorDummy]);
+    });
+    
+    Route::get('/admin/laporan/detail', function () use ($loginAdminDummy, $makeReportDummy) {
+        $loginAdminDummy();
+        return view('admin.reports.show', ['report' => $makeReportDummy()]);
+    });
+
+    Route::get('/admin/pengumuman', function () use ($loginAdminDummy) {
+        $loginAdminDummy();
+        return view('admin.announcements.index', ['announcements' => collect()]);
+    });
+    Route::get('/admin/warga', function () use ($loginAdminDummy) {
+        $loginAdminDummy();
+        return view('admin.wargas.index', ['wargas' => collect()]);
+    });
+});

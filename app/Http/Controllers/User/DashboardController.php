@@ -40,10 +40,16 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
+        // Pengumuman PALING baru, ditonjolkan sebagai Banner di atas dashboard.
+        // Catatan: ini item yang SAMA dengan pengumuman pertama di $pengumumanTerbaru,
+        // dipisah biar Blade tidak perlu akses index array secara manual.
+        $pengumumanBanner = $pengumumanTerbaru->first();
+
         return view('user.dashboard.index', [
             'ringkasan' => $ringkasan,
             'laporanTerbaru' => $laporanTerbaru,
             'pengumumanTerbaru' => $pengumumanTerbaru,
+            'pengumumanBanner' => $pengumumanBanner,
         ]);
     }
 }
