@@ -4,11 +4,12 @@
     - $ringkasan (array: total, menunggu, diproses, selesai)
     - $laporanTerbaru (Collection of Report, max 5, with category)
     - $pengumumanTerbaru (Collection of Announcement, max 3)
-    - $pengumumanBanner (Announcement|null, pengumuman terbaru untuk banner di atas)
+
+    REVISI: $pengumumanBanner dihapus (diganti sliding banner @foreach semua pengumuman).
+    labelTipe() dihapus (kolom tipe sudah tidak ada di tabel announcements).
 --}}
 @extends('layouts.user')
 @section('title', 'Dashboard - BISA')
-
 @section('content')
 <div class="space-y-8 max-w-6xl mx-auto pb-12">
 
@@ -18,7 +19,7 @@
         <p class="text-slate-500 text-sm font-medium">Unit: {{ auth()->user()->blok_rumah }}</p>
     </div>
 
-    {{-- Banner Pengumuman Atas: BISA Digeser/Slide ke Samping jika lebih dari 1 --}}
+    {{-- Banner Pengumuman Atas: bisa digeser/slide jika lebih dari 1 --}}
     @if ($pengumumanTerbaru && $pengumumanTerbaru->isNotEmpty())
         <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-none select-none">
             @foreach ($pengumumanTerbaru as $pengumuman)
@@ -29,10 +30,9 @@
                             <h2 class="text-lg font-bold text-slate-900">{{ $pengumuman->judul }}</h2>
                         </div>
                         <p class="text-[13px] md:text-sm text-slate-600 leading-relaxed pr-4 whitespace-pre-line">{{ $pengumuman->isi }}</p>
-
                         <div class="flex items-center justify-between mt-4 pt-2 border-t border-emerald-100/40">
-                            <span class="text-xs font-bold text-slate-500">{{ $pengumuman->labelTipe() }} &bull; {{ $pengumuman->created_at->format('d M Y') }}</span>
-                            @if($pengumumanTerbaru->count() > 1)
+                            <span class="text-xs font-bold text-slate-500">{{ $pengumuman->created_at->format('d M Y') }}</span>
+                            @if ($pengumumanTerbaru->count() > 1)
                                 <span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Geser &rarr;</span>
                             @endif
                         </div>
@@ -104,9 +104,9 @@
                                     $statusStyle = match ($laporan->status) {
                                         'menunggu' => 'bg-amber-50 text-amber-700 border-amber-200',
                                         'diproses' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                        'selesai' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                        'ditolak' => 'bg-rose-50 text-rose-700 border-rose-200',
-                                        default => 'bg-slate-50 text-slate-700 border-slate-200',
+                                        'selesai'  => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                        'ditolak'  => 'bg-rose-50 text-rose-700 border-rose-200',
+                                        default    => 'bg-slate-50 text-slate-700 border-slate-200',
                                     };
                                 @endphp
                                 <span class="{{ $statusStyle }} border px-3 py-1 rounded-full text-[11px] font-bold">{{ ucfirst($laporan->status) }}</span>
