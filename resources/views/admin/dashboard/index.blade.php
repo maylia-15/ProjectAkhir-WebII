@@ -9,7 +9,7 @@
     - DITAMBAHKAN: Card Laporan Terbaru (5 terbaru, sesuai konsep UI Admin)
 --}}
 @extends('layouts.admin')
-@section('title', 'Dashboard Admin - BiSa')
+@section('title', 'Dashboard Admin - BISA')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-8 pb-12">

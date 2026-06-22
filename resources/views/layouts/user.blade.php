@@ -31,10 +31,35 @@
                     </a>
                 </nav>
             </div>
-            
-            <div class="p-4 mt-auto border-t border-slate-100">
-                <div class="bg-white border border-slate-200 p-3.5 rounded-2xl flex flex-col gap-3 shadow-sm">
-                    <div class="flex items-center gap-3 select-none">
+
+            {{--
+                DIREVISI: Bagian bawah sidebar desktop.
+                Sebelumnya: 2 tombol langsung (Profil + Keluar).
+                Sekarang: Kartu profil + klik titik tiga → popup melayang ke atas
+                berisi tombol "Lihat Profil" dan "Keluar" (sama persis pola dengan layouts/admin.blade.php).
+            --}}
+            <div class="p-4 mt-auto border-t border-slate-100 relative">
+
+                {{-- Popup Profil & Keluar (tersembunyi default, muncul saat titik tiga diklik) --}}
+                <div id="user-profile-dropdown"
+                     class="hidden absolute bottom-full left-4 right-4 mb-3 bg-white border border-slate-200 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] overflow-hidden z-50">
+                    <a href="{{ route('profile.show') }}"
+                        class="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-slate-50 text-sm font-semibold text-slate-700 border-b border-slate-100 transition">
+                        <i class="fa-solid fa-circle-user text-[#1a8e5f] w-5 text-center text-lg"></i> Lihat Profil
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left px-5 py-4 flex items-center gap-3 hover:bg-rose-50 text-sm font-semibold text-rose-600 transition cursor-pointer">
+                            <i class="fa-solid fa-door-open text-rose-500 w-5 text-center text-lg"></i> Keluar
+                        </button>
+                    </form>
+                </div>
+
+                {{-- Kartu Profil --}}
+                <div id="user-profile-btn"
+                     class="bg-white border border-slate-200 p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition shadow-sm select-none">
+                    <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-gradient-to-br from-[#1a8e5f] to-[#10b981] rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </div>
@@ -43,19 +68,7 @@
                             <p class="text-xs text-slate-500 font-medium mt-0.5">Unit {{ auth()->user()->blok_rumah }}</p>
                         </div>
                     </div>
-                    
-                    <div class="flex gap-2 w-full">
-                        <a href="{{ route('profile.show') }}" class="flex-1 flex items-center justify-center gap-1.5 py-2 bg-emerald-50 text-[#1a8e5f] text-xs font-bold rounded-xl hover:bg-emerald-100/70 transition border border-emerald-100/50 text-center">
-                            <i class="fa-solid fa-circle-user text-sm"></i> Profil
-                        </a>
-                        
-                        <form method="POST" action="{{ route('logout') }}" class="flex-1 flex">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center justify-center gap-1.5 py-2 bg-rose-50 text-rose-600 text-xs font-bold rounded-xl hover:bg-rose-100 transition border border-rose-100/50 text-center cursor-pointer">
-                                <i class="fa-solid fa-door-open text-sm"></i> Keluar
-                            </button>
-                        </form>
-                    </div>
+                    <i class="fa-solid fa-ellipsis-vertical text-slate-400 pr-1"></i>
                 </div>
             </div>
         </aside>
@@ -103,11 +116,26 @@
     </div>
 
     <script>
+        // Mobile drawer
         function openMobileDrawer() {
             document.getElementById('mobile-drawer').classList.remove('hidden');
         }
         function closeMobileDrawer() {
             document.getElementById('mobile-drawer').classList.add('hidden');
+        }
+
+        // Popup titik tiga Kartu Profil User (Lihat Profil + Keluar)
+        const userProfileBtn = document.getElementById('user-profile-btn');
+        const userProfileDropdown = document.getElementById('user-profile-dropdown');
+
+        if (userProfileBtn) {
+            userProfileBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                userProfileDropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function () {
+                userProfileDropdown.classList.add('hidden');
+            });
         }
     </script>
 </body>

@@ -8,7 +8,7 @@
     Modal Create & Edit: Input Judul + Textarea Isi saja.
 --}}
 @extends('layouts.admin')
-@section('title', 'Kelola Pengumuman - BiSa')
+@section('title', 'Kelola Pengumuman - BISA')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6 pb-12">

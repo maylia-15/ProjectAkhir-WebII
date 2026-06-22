@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'BiSa - Admin')</title>
+    <title>@yield('title', 'BISA - Admin')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -20,7 +20,7 @@
             <div class="px-6 py-8 flex items-center gap-3 border-b border-slate-100">
                 <div class="w-8 h-8 bg-slate-800 rounded flex items-center justify-center text-white font-black text-lg">B</div>
                 <div>
-                    <h1 class="text-xl font-bold text-slate-900 tracking-wide leading-none">BiSa</h1>
+                    <h1 class="text-xl font-bold text-slate-900 tracking-wide leading-none">BISA</h1>
                     <span class="text-[10px] text-red-500 font-bold uppercase tracking-wider">Admin Panel</span>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 <div class="px-6 py-6 flex items-center justify-between border-b border-gray-100">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 bg-slate-800 rounded flex items-center justify-center text-white font-bold">B</div>
-                        <span class="font-bold text-slate-900 text-xl">BiSa</span>
+                        <span class="font-bold text-slate-900 text-xl">BISA</span>
                     </div>
                     <button onclick="closeMobileDrawer()" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
@@ -122,7 +122,7 @@
         <header class="md:hidden w-full bg-white border-b border-gray-200 py-4 px-5 flex items-center justify-between shrink-0 z-10">
             <div class="flex items-center gap-2.5">
                 <div class="w-7 h-7 bg-slate-800 rounded-lg flex items-center justify-center text-white"><i class="fa-solid fa-user-shield text-xs"></i></div>
-                <span class="font-bold text-slate-900">BiSa Admin</span>
+                <span class="font-bold text-slate-900">BISA Admin</span>
             </div>
             <button onclick="openMobileDrawer()" class="p-1.5 text-slate-700 border border-gray-200 rounded-lg cursor-pointer"><i class="fa-solid fa-bars text-lg"></i></button>
         </header>
