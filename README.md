@@ -81,8 +81,9 @@ Pengguna dengan peran Admin (Pak RT ) bertindak sebagai pengambil keputusan tert
 erDiagram
     USERS ||--o{ REPORTS : "membuat"
     CATEGORIES ||--o{ REPORTS : "mengelompokkan"
-    REPORTS ||--|{ REPORT_TAG : "memiliki"
-    TAGS ||--|{ REPORT_TAG : "dilekatkan"
+    REPORTS ||--o{ REPORT_TAG : "memiliki"
+    TAGS ||--o{ REPORT_TAG : "dilekatkan"
+    USERS ||--o{ ANNOUNCEMENTS : "membuat"
 
     USERS {
         bigint id PK
@@ -95,7 +96,7 @@ erDiagram
         enum role "admin, warga"
         varchar remember_token
         timestamp created_at
-        timestamp update_ut
+        timestamp updated_at
     }
     CATEGORIES {
         bigint id PK
@@ -103,7 +104,7 @@ erDiagram
         varchar slug
         varchar deskripsi
         timestamp created_at
-        timestamp update_ut
+        timestamp updated_at
     }
     REPORTS {
         bigint id PK
@@ -112,23 +113,30 @@ erDiagram
         varchar judul
         text deskripsi
         varchar lokasi
-        enum status "menunggu, diproses, selesai"
+        enum status "menunggu, diproses, selesai, ditolak"
         timestamp created_at
-        timestamp update_ut
+        timestamp updated_at
     }
     TAGS {
         bigint id PK
         varchar nama_tag
         timestamp created_at
-        timestamp update_ut
+        timestamp updated_at
+    }
+    REPORT_TAG {
+        bigint id PK
+        bigint report_id FK
+        bigint tag_id FK
+        timestamp created_at
+        timestamp updated_at
     }
     ANNOUNCEMENTS {
         bigint id PK
-        bigint user_id
+        bigint user_id FK
         varchar judul
         text isi
         timestamp created_at
-        timestamp update_ut
+        timestamp updated_at
     }
 ```
 ---
