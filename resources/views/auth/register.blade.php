@@ -14,7 +14,7 @@
             <h1 class="text-2xl font-bold text-slate-900 mb-1">Daftar Akun</h1>
         </div>
 
-    <form action="{{ route('register.attempt') }}" method="POST" class="space-y-4">
+        <form action="{{ route('register.attempt') }}" method="POST" class="space-y-4">
     @csrf
     <div>
         <label class="block text-xs font-bold text-gray-700 mb-1.5">Nama Lengkap</label>
@@ -57,5 +57,7 @@
     </div>
     <button type="submit" class="w-full bg-[#1a8e5f] hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-sm transition mt-2">Daftar</button>
 </form>
+        <p class="text-center text-sm text-gray-600 mt-6">Sudah punya akun? <a href="{{ route('login') }}" class="text-[#1a8e5f] font-bold hover:underline">Masuk</a></p>
+    </div>
 </body>
 </html>
