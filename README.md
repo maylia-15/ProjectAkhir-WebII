@@ -133,7 +133,7 @@ erDiagram
 ```
 ---
 
-# 🛠️ Panduan Instalasi Lokal - Aplikasi BiSa (Bijak Sampah)
+# 🛠️ Panduan Instalasi Lokal
 
 Panduan ini akan menuntun Anda untuk melakukan instalasi dan menjalankan aplikasi **BiSa** di lingkungan lokal komputer menggunakan **Laragon** sebagai local server.
 
@@ -154,8 +154,7 @@ Sebelum memulai, pastikan perangkat Anda sudah terinstal beberapa perangkat luna
 ### Langkah 1: Kloning Repositori Proyek
 Buka terminal Anda (Git Bash, PowerShell, atau Terminal VS Code), lalu jalankan perintah berikut untuk mengunduh source code dari GitHub:
 ```bash
-git clone [https://github.com/maylia-15/ProjectAkhir-WebII.git](https://github.com/maylia-15/ProjectAkhir-WebII.git)
-cd ProjectAkhir-WebII
+git clone https://github.com/maylia-15/ProjectAkhir-WebII.git
 ```
 
 ---
