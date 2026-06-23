@@ -14,7 +14,7 @@
             <h1 class="text-2xl font-bold text-slate-900 mb-1">Daftar Akun</h1>
         </div>
 
-       <form action="{{ route('register.attempt') }}" method="POST" class="space-y-4">
+    <form action="{{ route('register.attempt') }}" method="POST" class="space-y-4">
     @csrf
     <div>
         <label class="block text-xs font-bold text-gray-700 mb-1.5">Nama Lengkap</label>
