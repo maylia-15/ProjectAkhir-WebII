@@ -14,7 +14,6 @@ class Announcement extends Model
     protected $fillable = [
         'user_id',
         'judul',
-        'tipe',
         'isi',
     ];
 
@@ -30,24 +29,5 @@ class Announcement extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /*
-    |--------------------------------------------------------------------
-    | Helper Tipe (dipakai di Blade untuk label tampilan)
-    |--------------------------------------------------------------------
-    */
-
-    /**
-     * Label tipe yang lebih enak dibaca di tampilan (bukan snake_case mentah).
-     */
-    public function labelTipe(): string
-    {
-        return match ($this->tipe) {
-            'jadwal_kerja_bakti' => 'Jadwal Kerja Bakti',
-            'jadwal_truk_sampah' => 'Jadwal Truk Sampah',
-            'himbauan'           => 'Himbauan',
-            default              => ucfirst($this->tipe),
-        };
     }
 }

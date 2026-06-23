@@ -13,8 +13,9 @@ class DashboardController extends Controller
     /**
      * Tampilkan Halaman Dashboard User.
      *
-     * Sesuai konsep UI User:
-     * - Section Ringkasan: 3 card jumlah laporan milik user (Menunggu, Diproses, Selesai)
+     * Sesuai konsep UI User (revisi final + desain Naufal):
+     * - Section Ringkasan: 4 card (Total, Menunggu, Diproses, Selesai)
+     * - Tabel Laporan Terbaru: 5 laporan terakhir milik user (dengan kategori & lokasi)
      * - Section Pengumuman Terbaru: 3 pengumuman teratas dari admin dalam bentuk card
      *   (BUKAN menu sidebar terpisah - hanya tampil di sini)
      */
@@ -23,10 +24,17 @@ class DashboardController extends Controller
         $userId = Auth::id();
 
         $ringkasan = [
+            'total' => Report::milikUser($userId)->count(),
             'menunggu' => Report::milikUser($userId)->status('menunggu')->count(),
             'diproses' => Report::milikUser($userId)->status('diproses')->count(),
             'selesai' => Report::milikUser($userId)->status('selesai')->count(),
         ];
+
+        $laporanTerbaru = Report::with('category')
+            ->milikUser($userId)
+            ->latest()
+            ->take(5)
+            ->get();
 
         $pengumumanTerbaru = Announcement::latest()
             ->take(3)
@@ -34,6 +42,7 @@ class DashboardController extends Controller
 
         return view('user.dashboard.index', [
             'ringkasan' => $ringkasan,
+            'laporanTerbaru' => $laporanTerbaru,
             'pengumumanTerbaru' => $pengumumanTerbaru,
         ]);
     }

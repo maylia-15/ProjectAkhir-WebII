@@ -11,9 +11,22 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Tampilkan Halaman Profil (U - Update).
+     * Tampilkan Halaman Profil (R - Read, halaman lihat saja).
      *
-     * Sesuai konsep UI User: Form data akun warga (Nama, No HP, No Rumah).
+     * Sesuai konsep UI User (revisi final): Halaman Profil dan Halaman Edit Profil
+     * dipisah menjadi 2 halaman berbeda (sebelumnya digabung jadi satu).
+     */
+    public function show(): View
+    {
+        return view('profile.show', [
+            'user' => Auth::user(),
+        ]);
+    }
+
+    /**
+     * Tampilkan Halaman Edit Profil (form untuk Update).
+     *
+     * Sesuai konsep UI: Form data akun warga (Nama, No HP, Unit/Blok Rumah).
      * Controller ini dipakai bersama oleh User maupun Admin (sama-sama punya profil).
      */
     public function edit(): View
@@ -42,7 +55,6 @@ class ProfileController extends Controller
             $user->password = Hash::make($validated['password']);
         }
 
-        // Fungsi save() sekarang terbaca dengan aman tanpa garis merah
         $user->save();
 
         return back()->with('success', 'Data akun berhasil diperbarui.');
