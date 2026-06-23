@@ -21,24 +21,35 @@
 
     {{-- Banner Pengumuman Atas: bisa digeser/slide jika lebih dari 1 --}}
     @if ($pengumumanTerbaru && $pengumumanTerbaru->isNotEmpty())
-        <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-none select-none">
-            @foreach ($pengumumanTerbaru as $pengumuman)
-                <div class="w-full shrink-0 snap-start bg-gradient-to-r from-emerald-50 to-[#f0fdf4] rounded-2xl p-6 border border-emerald-100 flex gap-4 shadow-sm">
-                    <div class="mt-1"><i class="fa-solid fa-bullhorn text-[#1a8e5f] text-2xl drop-shadow-sm"></i></div>
-                    <div class="flex-1">
-                        <div class="mb-2">
-                            <h2 class="text-lg font-bold text-slate-900">{{ $pengumuman->judul }}</h2>
-                        </div>
-                        <p class="text-[13px] md:text-sm text-slate-600 leading-relaxed pr-4 whitespace-pre-line">{{ $pengumuman->isi }}</p>
-                        <div class="flex items-center justify-between mt-4 pt-2 border-t border-emerald-100/40">
-                            <span class="text-xs font-bold text-slate-500">{{ $pengumuman->created_at->format('d M Y') }}</span>
-                            @if ($pengumumanTerbaru->count() > 1)
-                                <span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Geser &rarr;</span>
-                            @endif
+        <div class="space-y-2">
+            <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-4 pb-3 scrollbar-none select-none scroll-smooth">
+                @foreach ($pengumumanTerbaru as $pengumuman)
+                    <div class="w-full shrink-0 snap-start snap-always bg-gradient-to-r from-emerald-50 to-[#f0fdf4] rounded-2xl p-6 border border-emerald-100 flex gap-4 shadow-sm">
+                        <div class="mt-1"><i class="fa-solid fa-bullhorn text-[#1a8e5f] text-2xl drop-shadow-sm"></i></div>
+                        <div class="flex-1">
+                            <div class="mb-2">
+                                <h2 class="text-lg font-bold text-slate-900">{{ $pengumuman->judul }}</h2>
+                            </div>
+                            <p class="text-[13px] md:text-sm text-slate-600 leading-relaxed pr-4 whitespace-pre-line">{{ $pengumuman->isi }}</p>
+                            <div class="flex items-center justify-between mt-4 pt-2 border-t border-emerald-100/40">
+                                <span class="text-xs font-bold text-slate-500">{{ $pengumuman->created_at->format('d M Y') }}</span>
+                                @if ($pengumumanTerbaru->count() > 1)
+                                    <span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full animate-pulse">Geser &rarr;</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            </div>
+            
+            {{-- Indikator Dots Kecil Slider (Hanya muncul jika pengumuman > 1) --}}
+            @if ($pengumumanTerbaru->count() > 1)
+                <div class="flex justify-center gap-1.5 pt-1">
+                    @foreach ($pengumumanTerbaru as $index => $p)
+                        <span class="h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'w-4 bg-[#1a8e5f]' : 'w-1.5 bg-emerald-200' }}"></span>
+                    @endforeach
                 </div>
-            @endforeach
+            @endif
         </div>
     @endif
 
